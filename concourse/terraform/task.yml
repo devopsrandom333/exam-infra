@@ -1,0 +1,28 @@
+platform: linux
+
+image_resource:
+  type: docker-image
+  source:
+    repository: hashicorp/terraform
+    tag: "0.11.8"
+
+inputs:
+- name: source
+
+outputs:
+- name: with-state
+
+caches:
+- path: terraform-cache
+
+params:
+  command:
+  directories:
+  cache: "false"
+  lock_timeout: 5m
+  github_token: ((github_token))
+  statuscake_api_key: ((statuscake_api_key))
+  hostedgraphite_apikey: ((hostedgraphite_apikey))
+  graphite_host: ((graphite_host))
+run:
+  path: ./source/concourse/terraform/terraform.sh

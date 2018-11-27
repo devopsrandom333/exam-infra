@@ -1,0 +1,89 @@
+jobs:
+- name: build
+  plan:
+  - get: monitoring-app
+    trigger: true
+  - get: monitoring-infra
+
+  - task: mvn_build
+    file: monitoring-infra/concourse/java/task.yml
+    input_mapping: {source: monitoring-app}
+    params:
+      app_name: ((heroku_app_name))
+      heroku_email: ((heroku_email))
+      heroku_api_token: ((heroku_api_key))
+      hostedgraphite_apikey: ((hostedgraphite_apikey))
+      graphite_host: ((graphite_host))
+
+  - put: docker-image-app
+    params:
+      build: jar-file
+
+- name: deploy-ci
+  plan:
+  - aggregate:
+      - get: monitoring-infra
+      - get: docker-image-app
+        trigger: true
+        passed: [build]
+  - task: set-env-vars
+    file: monitoring-infra/concourse/heroku/set-env-vars.yml
+    params:
+      app_name: ((heroku_app_name))
+      heroku_api_token: ((heroku_api_key))
+      heroku_email: ((heroku_email))
+      hostedgraphite_apikey: ((hostedgraphite_apikey))
+      graphite_host: ((graphite_host))
+
+  - task: create-reg
+    file: monitoring-infra/concourse/heroku/create-reg-on-heroku.yml
+    params:
+      app_name: ((heroku_app_name))
+      heroku_api_token: ((heroku_api_key))
+      heroku_email: ((heroku_email))
+      hostedgraphite_apikey: ((hostedgraphite_apikey))
+      graphite_host: ((graphite_host))
+
+- name: infra
+  plan:
+  - aggregate:
+    - get: monitoring-infra
+  - task: apply
+    file: monitoring-infra/concourse/terraform/task.yml
+    input_mapping: {source: monitoring-infra}
+    params:
+      github_token: ((github_token))
+      heroku_api_key: ((heroku_api_key))
+      statuscake_api_key: ((statuscake_api_key))
+      hostedgraphite_apikey: ((hostedgraphite_apikey))
+      graphite_host: ((graphite_host))
+      command: apply
+      directories: |
+          terraform
+  - put: monitoring-infra
+    params:
+      repository: with-state
+      rebase: true
+
+
+resources:
+- name: monitoring-app
+  type: git
+  source:
+      uri: https://github.com/devopsrandom333/exam-app.git
+      branch: master
+      private_key: ((deploy_key_app))
+
+- name: monitoring-infra
+  type: git
+  source:
+      uri: git@github.com:devopsrandom333/exam-infra.git
+      branch: master
+      private_key: ((deploy_key_infra))
+
+- name: docker-image-app
+  type: docker-image
+  source:
+    repository: registry.heroku.com/((heroku_app_name))/web
+    username: ((heroku_email))
+    password: ((heroku_api_key))
