@@ -9,7 +9,7 @@ jobs:
     file: monitoring-infra/concourse/java/task.yml
     input_mapping: {source: monitoring-app}
     params:
-      app_name: ((heroku_app_name))
+      app_name: ((heroku_app_name))-app-ci
       heroku_email: ((heroku_email))
       heroku_api_token: ((heroku_api_key))
       hostedgraphite_apikey: ((hostedgraphite_apikey))
@@ -84,6 +84,6 @@ resources:
 - name: docker-image-app
   type: docker-image
   source:
-    repository: registry.heroku.com/((heroku_app_name))/web
+    repository: registry.heroku.com/((heroku_app_name))-app-ci/web
     username: ((heroku_email))
     password: ((heroku_api_key))
