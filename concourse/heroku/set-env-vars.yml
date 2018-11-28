@@ -33,5 +33,5 @@ run:
     heroku config:set HOSTEDGRAPHITE_APIKEY=${hostedgraphite_apikey} -a ${app_name}-production
 
     heroku config:set HOSTEDGRAPHITE_APIKEY=${hostedgraphite_apikey} -a ${app_name}-app-ci
-    heroku config:set HOSTEDGRAPHITE_APIKEY=${hostedgraphite_apikey} -a ${app_name}-staging
-    heroku config:set HOSTEDGRAPHITE_APIKEY=${hostedgraphite_apikey} -a ${app_name}-production
+    heroku config:set HOSTEDGRAPHITE_APIKEY=${hostedgraphite_apikey} -a ${app_name}-app-staging
+    heroku config:set HOSTEDGRAPHITE_APIKEY=${hostedgraphite_apikey} -a ${app_name}-app-production
