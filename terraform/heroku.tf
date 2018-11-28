@@ -2,6 +2,9 @@
 resource "heroku_app" "ci" {
   name   = "${var.app_prefix}-app-ci"
   region = "eu"
+  config_vars = {
+    JAVA_TOOL_OPTIONS = "-Xmx300m"
+  }
 }
 
 # Create a database, and configure the app to use it
