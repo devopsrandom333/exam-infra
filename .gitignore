@@ -5,7 +5,6 @@ app-key.pub
 
 deploy_infra.pub
 credentials.yaml
-credentials_example.yml
 credentials.yml
 cred.yml
 .terraform
