@@ -1,5 +1,6 @@
 # Readme
-I did task 1, 2 and 3 with maven caching
+I did task Basis pipeline (10 poeng), Docker (20 poeng) and Overvåkning, varsling og Metrics (20 poeng) 
+and with maven caching
 
 ## 
 Remember to set emails and variabels that you might need.
