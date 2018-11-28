@@ -1,5 +1,5 @@
 provider "statuscake" {
-  username = "jarandwaagekleppagmailcom"
+  username = "yourmailhere"
 //  your email
 }
 
