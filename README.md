@@ -4,3 +4,6 @@ and with maven caching in build for the extra points
 
 ## 
 input your credentials in the heroku_provider.tf and statuscake.tf and needed keys in credentials_example.yml
+
+
+leave the heroku app name in credentials as is or replace it with something similiar. 
